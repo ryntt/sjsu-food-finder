@@ -51,7 +51,7 @@ def main():
         price_pattern = re.compile(r'p([1-4])')
 
         # if the first string is $sjsufood, then...
-        if starting_pattern.match(txt):
+        if starting_pattern.match(txt) and txt:
             formatted_txt = txt.replace('$sjsufood', '').strip()
             if formatted_txt == 'help' or formatted_txt == '':
                 await message.channel.send(HELP_DOC)
