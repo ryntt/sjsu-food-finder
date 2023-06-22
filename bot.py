@@ -79,7 +79,7 @@ def main():
                 except Exception as e:
                     print(f'An exception has occurred: {e}')
 
-    load_dotenv()
+    load_dotenv('.env')
     client.run(os.getenv('TOKEN'))
 
 
