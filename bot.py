@@ -51,36 +51,33 @@ def main():
         price_pattern = re.compile(r'p([1-4])')
 
         # if the first string is $sjsufood, then...
-        if starting_pattern.match(txt):
-            try:
-                formatted_txt = txt.replace('$sjsufood', '').strip()
-                if formatted_txt == 'help' or formatted_txt == '':
-                    await message.channel.send(HELP_DOC)
-                elif find_pattern.match(formatted_txt):
-                    await message.channel.send(yelp.return_details(
-                        find_pattern.match(formatted_txt).group(1)))
-                else:
-                    category = category_pattern.search(formatted_txt)\
-                        .group(1) \
-                        if category_pattern.search(formatted_txt) else \
-                        yelp.DEFAULT_CATEGORY
-                    num = int(num_pattern.search(formatted_txt).group(1) if
-                              num_pattern.search(formatted_txt) else
-                              yelp.DEFAULT_LIMIT)
-                    rating = float(rating_pattern.search(formatted_txt)
-                                   .group(1) if
-                                   rating_pattern.search(formatted_txt) else
-                                   yelp.DEFAULT_RATING)
-                    price = int(price_pattern.search(formatted_txt).group(1) if
-                                price_pattern.search(
-                                    formatted_txt) else yelp.DEFAULT_PRICE)
-                    price_arr = [i for i in range(1, 5) if i <= price]
+        if starting_pattern.match(txt) and txt is not None:
+            formatted_txt = txt.replace('$sjsufood', '').strip()
+            if formatted_txt == 'help' or formatted_txt == '':
+                await message.channel.send(HELP_DOC)
+            elif find_pattern.match(formatted_txt):
+                await message.channel.send(yelp.return_details(
+                    find_pattern.match(formatted_txt).group(1)))
+            else:
+                category = category_pattern.search(formatted_txt).group(1) \
+                    if category_pattern.search(formatted_txt) else \
+                    yelp.DEFAULT_CATEGORY
+                num = int(num_pattern.search(formatted_txt).group(1) if
+                          num_pattern.search(formatted_txt) else
+                          yelp.DEFAULT_LIMIT)
+                rating = float(rating_pattern.search(formatted_txt).group(1) if
+                               rating_pattern.search(formatted_txt) else
+                               yelp.DEFAULT_RATING)
+                price = int(price_pattern.search(formatted_txt).group(1) if
+                            price_pattern.search(
+                                formatted_txt) else yelp.DEFAULT_PRICE)
+                price_arr = [i for i in range(1, 5) if i <= price]
+                try:
                     await message.channel.send(yelp.eatery_list_string
-                            (yelp.return_best_results(
-                            category, num, rating, price_arr)))
-            except Exception as e:
-                print(f'An exception has occurred: {e}')
-                pass
+                        (yelp.return_best_results(
+                        category, num, rating, price_arr)))
+                except Exception as e:
+                    print(f'An exception has occurred: {e}')
 
     load_dotenv()
     client.run(os.getenv('TOKEN'))
